@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Main</title>
+	 <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+      <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="css/font-awesome.css">
+
+</head>
+<body>
+<div class="container">
+
+   <div class="row">
+ <i class="fa fa-angle-double-left fa-2x" onclick="GoBack()"></i>
+  <h4 class="text-center">  Text to Save:</h4>
+ <textarea id="inputTextToSave" class="form-control" rows="20"></textarea>
+</div>
+
+<div class="row">
+  <h4>Filename to Save As:</h4>
+    <input id="inputFileNameToSaveAs" class="form-control"></input>
+  <button onclick="saveTextAsFile()" style="background-color: #3599d4;color: white;">Save Text to File</button>
+</div>
+<div class="row">
+  <h4>Select a File to Load:</h4>
+ 
+  <input type="file" id="fileToLoad" class="form-control"></input>
+  <button onclick="loadFileAsText()" style="background-color: #3599d4;color: white;" >Load Selected File</button>
+</div>
+
+</div>
+
+
+  <script src="js/jquery.min.js"></script>
+  <script src="js/angular.min.js"></script>
+
+<script type="text/javascript">
+ 
+function saveTextAsFile()
+{
+    var textToSave = document.getElementById("inputTextToSave").value;
+    var textToSaveAsBlob = new Blob([textToSave], {type:"text/plain"});
+    var textToSaveAsURL = window.URL.createObjectURL(textToSaveAsBlob);
+    var fileNameToSaveAs = document.getElementById("inputFileNameToSaveAs").value;
+ 
+    var downloadLink = document.createElement("a");
+    downloadLink.download = fileNameToSaveAs;
+    downloadLink.innerHTML = "Download File";
+    downloadLink.href = textToSaveAsURL;
+    downloadLink.onclick = destroyClickedElement;
+    downloadLink.style.display = "none";
+    document.body.appendChild(downloadLink);
+ 
+    downloadLink.click();
+}
+ 
+function destroyClickedElement(event)
+{
+    document.body.removeChild(event.target);
+}
+ 
+
+function GoBack()
+{
+    window.location.href="main.html";
+}
+
+function loadFileAsText()
+{
+    var fileToLoad = document.getElementById("fileToLoad").files[0];
+ 
+    var fileReader = new FileReader();
+    fileReader.onload = function(fileLoadedEvent) 
+    {
+        var textFromFileLoaded = fileLoadedEvent.target.result;
+        document.getElementById("inputTextToSave").value = textFromFileLoaded;
+    };
+    fileReader.readAsText(fileToLoad, "UTF-8");
+}
+ 
+</script>
+</body>
+</html>
